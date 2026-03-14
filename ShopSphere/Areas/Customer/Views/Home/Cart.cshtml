@@ -1,0 +1,119 @@
+﻿@using ShopSphere.Models
+@model List<ShopSphere.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+<h1>Your Cart</h1>
+
+<br />
+
+<div class="row">
+    <table class="table table-bordered">
+
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Total</th>
+                <th>Product Type</th>
+                <th>Color</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+                var total = item.Product.Price * item.Quantity;
+
+                <tr>
+
+                    <td>
+                        <img src="~/@item.Product.Image" style="width:200px;height:150px;" />
+                    </td>
+
+                    <td>@item.Product.Name</td>
+
+                    <td>@item.Product.Price</td>
+                    <td>
+
+                        <a asp-area="Customer"
+                           asp-controller="Home"
+                           asp-action="DecreaseQty"
+                           asp-route-id="@item.Product.Id"
+                           class="btn btn-danger">-</a>
+
+                        <span style="margin:10px;">@item.Quantity</span>
+
+                        <a asp-area="Customer"
+                           asp-controller="Home"
+                           asp-action="IncreaseQty"
+                           asp-route-id="@item.Product.Id"
+                           class="btn btn-success">+</a>
+
+                    </td>
+
+                    <td>@total</td>
+
+                    <td>@item.Product.ProductTypes.ProductType</td>
+
+                    <td>@item.Product.ProductColor</td>
+
+                    <td>
+
+                        <a asp-area="Customer"
+                               asp-controller="Home"
+                               asp-action="RemoveCartItem"
+                               asp-route-id="@item.Product.Id"
+                               class="btn btn-danger">
+
+                            <i class="fas fa-trash-alt"></i>
+
+                        </a>
+
+                    </td>
+
+                </tr>
+            }
+
+        </tbody>
+
+    </table>
+</div>
+
+<div class="row">
+
+    <div class="col-6">
+        <a asp-action="Index"
+               asp-controller="Home"
+               class="btn btn-success">
+            Back to Home
+        </a>
+    </div>
+
+    <div class="col-6 text-end">
+
+        <h3>Total Amount</h3>
+
+        <h3>
+            Grand Total :
+            @Model.Sum(c => c.Product.Price * c.Quantity)
+        </h3>
+
+        <a asp-area="Customer"
+               asp-controller="Order"
+               asp-action="Checkout"
+               class="btn btn-info">
+
+            Process to Checkout
+
+        </a>
+
+    </div>
+
+</div>

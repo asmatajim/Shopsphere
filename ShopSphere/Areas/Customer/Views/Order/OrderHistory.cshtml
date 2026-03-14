@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ShopSphere.Models.Order>
+
+<h2>Your Orders</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Order No</th>
+            <th>Date</th>
+            <th>Products</th>
+            <th>Total Items</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @foreach (var order in Model)
+        {
+            <tr>
+
+                <td>@order.OrderNo</td>
+
+                <td>@order.OrderDate.ToString("dd MMM yyyy")</td>
+
+                <td>
+                    @foreach (var item in order.OrderDetails)
+                    {
+                        <div class="mb-2">
+                            <img src="~/@item.Product.Image" style="height:60px;width:80px;object-fit:cover;" />
+                            <strong>@item.Product.Name</strong> (Qty: @item.Quantity)
+                        </div>
+                    }
+                </td>
+
+                <td>@order.OrderDetails.Sum(x => x.Quantity)</td>
+
+            </tr>
+        }
+
+    </tbody>
+
+</table>

@@ -1,0 +1,161 @@
+﻿@using ShopSphere.Models
+@model IEnumerable<Products>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br />
+<br />
+
+<div class="row">
+
+    <div class="col-6">
+        <h2 class="text-info">Product List</h2>
+    </div>
+
+    <div class="col-6 text-end">
+        <a asp-action="Create" class="btn btn-info">
+            <i class="fas fa-plus"></i> Add New Product
+        </a>
+    </div>
+
+</div>
+
+<form method="post">
+
+    <div class="row">
+
+        <div class="col-3">
+            <input type="text" placeholder="Search product name"
+                   class="form-control"
+                   name="searchName" />
+        </div>
+
+        <div class="col-3">
+            <input type="number"
+                   placeholder="Enter min price"
+                   class="form-control"
+                   name="lowAmount" />
+        </div>
+
+        <div class="col-3">
+            <input type="number"
+                   placeholder="Enter max price"
+                   class="form-control"
+                   name="largeAmount" />
+        </div>
+
+        <div class="col-3">
+            <input type="submit"
+                   value="Search"
+                   class="btn btn-success" />
+        </div>
+
+    </div>
+
+</form>
+
+<br />
+
+<div>
+
+    <table class="table table-striped border" id="myTable">
+
+        <thead>
+
+            <tr class="table-info">
+
+                <th>Image</th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Product Color</th>
+                <th>Available</th>
+                <th>Product Type</th>
+                <th>Special Tag</th>
+                <th>Actions</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+
+                <tr>
+                    <td>
+                        <img src="~/@item.Image"
+                             style="width:80px;height:80px;border-radius:5px;border:1px solid #ddd;" />
+                    </td>
+
+                    <td>@item.Name</td>
+
+                    <td>@item.Price</td>
+
+                    <td>@item.ProductColor</td>
+
+                    <td>@item.IsAvailable</td>
+
+                    <td>@item.ProductTypes.ProductType</td>
+
+                    <td>@item.SpecialTag.Name</td>
+
+                    <td>
+                        <partial name="_ButtonPartial" model="@item.Id" />
+                    </td>
+
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/alertify.min.js"></script>
+
+    <script>
+
+        $(document).ready(function ()
+        {
+        $('#myTable').DataTable({
+        dom: 'Bfrtip',
+        buttons: [
+        'copy','csv','excel','pdf','print'
+        ]
+        });
+        });
+        $(function () {
+
+        alertify.set('notifier','position', 'top-right');
+
+        var success = '@TempData["success"]';
+        if (success != '')
+        {
+        alertify.success(success);
+        }
+
+        var del = '@TempData["delete"]';
+        if (del != '')
+        {
+        alertify.error(del);
+        }
+
+        var error = '@TempData["error"]';
+        if (error != '')
+        {
+        alertify.error(error);
+        }
+
+        });
+
+    </script>
+
+}

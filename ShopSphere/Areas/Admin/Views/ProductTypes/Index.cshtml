@@ -1,0 +1,90 @@
+﻿@model IEnumerable<ShopSphere.Models.ProductTypes>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br />
+<br />
+
+<div class="row">
+
+    <div class="col-6">
+        <h2 class="text-info">Product Types List</h2>
+    </div>
+
+    <div class="col-6 text-end">
+        <a asp-action="Create" class="btn btn-info">
+            <i class="fas fa-plus"></i> Create New Product
+        </a>
+    </div>
+
+</div>
+
+<table class="table table-striped border">
+
+    <tr class="table-info">
+
+        <th>Sr. No</th>
+
+        <th>@Html.DisplayNameFor(x => x.ProductType)</th>
+
+        <th>Action</th>
+
+    </tr>
+
+    @{
+        int i = 1;
+    }
+
+    @foreach (var item in Model)
+    {
+
+        <tr>
+
+            <td>@i</td>
+
+            <td>@item.ProductType</td>
+
+            <td>
+                <partial name="_ButtonPartial" model="@item.Id" />
+            </td>
+
+        </tr>
+
+        i++;
+
+    }
+
+</table>
+
+@section Scripts {
+
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <script>
+
+        $(function () {
+
+        alertify.set('notifier', 'position', 'top-right');
+
+        var success = '@TempData["success"]';
+        if (success != '') {
+        alertify.success(success);
+        }
+
+        var deleteMsg = '@TempData["delete"]';
+        if (deleteMsg != '') {
+        alertify.error(deleteMsg);
+        }
+
+        var error = '@TempData["error"]';
+        if (error != '') {
+        alertify.error(error);
+        }
+
+        });
+
+    </script>
+
+}

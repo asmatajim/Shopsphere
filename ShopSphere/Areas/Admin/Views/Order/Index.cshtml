@@ -1,0 +1,43 @@
+﻿@model IEnumerable<ShopSphere.Models.Order>
+
+<h2>Orders</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Order No</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Order Date</th>
+            <th>Products</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderNo</td>
+                <td>@order.Name</td>
+                <td>@order.PhoneNo</td>
+                <td>@order.Email</td>
+                <td>@order.Address</td>
+                <td>@order.OrderDate.ToString("dd MMM yyyy")</td>
+
+                <td>
+                    @foreach (var detail in order.OrderDetails)
+                    {
+                        <div class="mb-2">
+                            <img src="~/@detail.Product.Image" style="height:60px;width:80px;object-fit:cover;" />
+                            <strong>@detail.Product.Name</strong> (Qty: @detail.Quantity)
+                        </div>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

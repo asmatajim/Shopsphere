@@ -1,0 +1,119 @@
+﻿@using ShopSphere.Models
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+
+@model IPagedList<Products>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<br />
+<br />
+<form method="get">
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+            <input type="text"
+                   name="search"
+                   class="form-control"
+                   placeholder="Search product..." />
+        </div>
+
+        <div class="col-md-3">
+            <select name="productType" class="form-control">
+                <option value="">All Product Types</option>
+
+                @foreach (var type in ViewBag.ProductTypes)
+                {
+                    <option value="@type.Id">@type.ProductType</option>
+                }
+
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <select name="tag" class="form-control">
+                <option value="">All Tags</option>
+
+                @foreach (var tag in ViewBag.Tags)
+                {
+                    <option value="@tag.Id">@tag.Name</option>
+                }
+
+            </select>
+        </div>
+
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">
+                Search
+            </button>
+        </div>
+
+    </div>
+
+</form>
+
+<div class="row">
+
+    @foreach (var product in Model)
+    {
+
+        <div class="col-4">
+
+            <div class="card mb-4">
+
+                <div class="card-header">
+
+                    <h4 class="my-0 font-weight-normal">
+                        <label style="font-size:23px;color:steelblue">
+                            @product.Name
+                        </label>
+                    </h4>
+
+                </div>
+
+                <img src="~/@product.Image"
+                     class="card-img-top"
+                     style="height:300px;" />
+
+                <div class="card-header">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div class="btn-group">
+                            <label style="font-size:20px;color:#a51313">
+                                <b>Price : @product.Price</b>
+                            </label>
+                        </div>
+
+                        <a asp-action="Detail"
+                               asp-controller="Home"
+                               asp-route-id="@product.Id"
+                               class="btn btn-success btn-outline-info">
+                            Details
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    }
+
+</div>
+
+<div>
+
+    @Html.PagedListPager(Model,
+    page => Url.Action("Index", new { page }),
+        new PagedListRenderOptions
+        {
+            Display = PagedListDisplayMode.IfNeeded
+        })
+
+</div>

@@ -1,0 +1,199 @@
+﻿@using Microsoft.AspNetCore.Http
+@using ShopSphere.Models
+@using ShopSphere.Utility
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ShopSphere</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css" />
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.11.2/build/css/alertify.min.css" />
+</head>
+
+<body>
+
+    @{
+        List<CartItem> cart = HttpContextAccessor.HttpContext.Session.Get<List<CartItem>>("cart");
+        int count = cart?.Sum(x => x.Quantity) ?? 0;
+    }
+
+    @if (User.Identity != null && User.Identity.IsAuthenticated)
+    {
+        <header>
+
+            <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+
+                <div class="container">
+
+                    <a class="navbar-brand"
+                           asp-area="Customer"
+                           asp-controller="Home"
+                           asp-action="Index">
+                        ShopSphere
+                    </a>
+
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target=".navbar-collapse">
+
+                        <span class="navbar-toggler-icon"></span>
+
+                    </button>
+
+                    <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+
+                        <partial name="_LoginPartial" />
+
+                        <ul class="navbar-nav flex-grow-1">
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                       asp-area="Customer"
+                                       asp-controller="Home"
+                                       asp-action="Index">
+                                    Home
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                       asp-area="Customer"
+                                       asp-controller="Home"
+                                       asp-action="Cart">
+
+                                    <i class="fas fa-shopping-cart"></i>
+
+                                    Cart
+
+                                    @if (count > 0)
+                                    {
+                                        <span class="badge bg-danger">@count</span>
+                                    }
+
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                       asp-area="Customer"
+                                       asp-controller="Order"
+                                       asp-action="OrderHistory">
+                                    My Orders
+                                </a>
+                            </li>
+
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                           asp-area="Admin"
+                                           asp-controller="ProductTypes"
+                                           asp-action="Index">
+                                        Product Types
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                           asp-area="Admin"
+                                           asp-controller="SpecialTag"
+                                           asp-action="Index">
+                                        Special Tag
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                           asp-area="Admin"
+                                           asp-controller="Product"
+                                           asp-action="Index">
+                                        Products List
+                                    </a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark"
+                                           asp-area="Admin"
+                                           asp-controller="Order"
+                                           asp-action="Index">
+                                        Orders
+                                    </a>
+                                </li>
+                            }
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </nav>
+
+        </header>
+    }
+
+    <div class="container">
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+    </div>
+
+    <footer class="border-top footer text-muted">
+
+        <div class="container">
+
+            &copy; 2026 - ShopSphere -
+
+            <a asp-area="" asp-controller="Home" asp-action="Privacy">
+                Privacy
+            </a>
+
+        </div>
+
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
+
+    @if (TempData["order"] != null)
+    {
+        <script>
+            $(function () {
+
+            alertify.set('notifier', 'position', 'top-right');
+            alertify.success('@TempData["order"]');
+
+            });
+        </script>
+    }
+</body>
+
+</html>
+
+
+
+
+

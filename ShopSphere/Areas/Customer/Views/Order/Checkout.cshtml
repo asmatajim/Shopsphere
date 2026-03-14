@@ -1,0 +1,126 @@
+﻿@model ShopSphere.Models.Order
+@using ShopSphere.Utility
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Checkout";
+    List<CartItem> cart = HttpContextAccessor.HttpContext.Session.Get<List<CartItem>>("cart") ?? new List<CartItem>();
+}
+
+<h2 class="text-info">Order Details</h2>
+
+<form asp-action="Checkout" method="post" id="checkoutForm" novalidate>
+    <div class="p-4 rounded border row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="col-6">
+            <div class="form-group row">
+                <div class="col-4"><label asp-for="Name"></label></div>
+                <div class="col-8">
+                    <input asp-for="Name"
+                           class="form-control"
+                           placeholder="Enter your name"
+                           maxlength="50"
+                           oninput="this.value = this.value.replace(/[^A-Za-z\s]/g,'')"
+                           required />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4"><label asp-for="PhoneNo"></label></div>
+                <div class="col-8">
+                    <input asp-for="PhoneNo"
+                           class="form-control"
+                           placeholder="Enter your phone number"
+                           maxlength="15"
+                           oninput="this.value = this.value.replace(/[^0-9]/g,'')"
+                           required />
+                    <span asp-validation-for="PhoneNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4"><label asp-for="Address"></label></div>
+                <div class="col-8">
+                    <input asp-for="Address" class="form-control" placeholder="Enter your address" required />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row mt-2">
+                <div class="col-4"><label asp-for="Email"></label></div>
+                <div class="col-8">
+                    <input asp-for="Email"
+                           type="email"
+                           class="form-control"
+                           placeholder="Enter your email"
+                           required />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-6">
+ 
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in cart)
+                    {
+                        <tr>
+                            <td><img src="~/@item.Product.Image" style="height:100px;width:150px;" /></td>
+                            <td>@item.Product.Name</td>
+                            <td>@item.Product.Price</td>
+                            <td>@item.Quantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="text-end">
+                <h3>Total Price: @cart.Sum(c => c.Product.Price * c.Quantity)</h3>
+            </div>
+
+            <div class="form-group text-end mt-2">
+                <input type="submit" value="Place Order" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.getElementById("checkoutForm").addEventListener("submit", function (event) {
+            if (!this.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+                alert("Please fill all fields correctly!");
+            }
+        });
+
+
+
+        $(function () {
+
+        alertify.set('notifier', 'position', 'top-right');
+        var order = '@TempData["order"]';
+        if (order != '')
+        {
+        alertify.success(order);
+        }
+
+        });
+    </script>
+}
