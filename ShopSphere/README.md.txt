@@ -20,8 +20,10 @@ An admin panel is available to manage products, product types, and special tags.
 ## Features
 
 * User registration and login using Identity
+* Secure authentication using ASP.NET Core Identity
 * Product listing and product details page
 * Add to cart functionality using session
+* Order history for users
 * Order placement
 * Admin panel for product management
 * Manage Product Types
@@ -36,6 +38,12 @@ An admin panel is available to manage products, product types, and special tags.
 * Views – Razor views for UI
 * Data – Database context and configuration
 * Utility – Helper classes such as Session extensions
+* Services – Contains DbInitializer used for seeding default admin role and user
+
+Data Management
+* Product Types and Special Tags are managed dynamically from the Admin panel and do not                 require database seeding.
+
+* Admin role and default admin user are seeded in the project using the DbInitializer    service.
 
 ## How to Run the Project
 
@@ -44,6 +52,10 @@ An admin panel is available to manage products, product types, and special tags.
 3. Update the database connection string in appsettings.json
 4. Run database migrations
 5. Run the project
-6.For Admin Login-Email:admin@shopsphere.com  Password:Admin@123
+
+Default Admin Login
+
+Email: admin@shopsphere.com
+Password: Admin@123
 
 ##
